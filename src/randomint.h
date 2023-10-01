@@ -7,7 +7,8 @@ namespace Matrix::Utility {
 class RandomInt {
 public:
     RandomInt(int min, int max)
-        : distribution(min, max) {
+        : distribution(min, max)
+    {
         generator.seed(std::random_device()());
     }
 

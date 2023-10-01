@@ -22,15 +22,15 @@ public:
         noecho();
         curs_set(0);
         nodelay(stdscr, TRUE);
-        start_color();
-        init_pair(1, COLOR_GREEN, COLOR_BLACK);
-        attron(COLOR_PAIR(1) | A_BOLD);
+        // start_color();
+        // init_pair(1, COLOR_GREEN, COLOR_BLACK);
+        // attron(COLOR_PAIR(1) | A_BOLD);
 
         getmaxyx(stdscr, m_height, m_width);
     }
 
     int DestroyWindow() {
-        attroff(COLOR_PAIR(1) | A_BOLD);
+        // attroff(COLOR_PAIR(1) | A_BOLD);
         return endwin();
     }
     int Refresh() { return refresh(); }

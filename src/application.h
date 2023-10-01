@@ -19,12 +19,12 @@ public:
     Application(std::chrono::milliseconds period_ms)
         : m_window{}
         , rand_pos{0, m_window.GetWindowSize().second}
-        , rand_size{m_window.GetWindowSize().first * (1/2), m_window.GetWindowSize().first}
+        , rand_size{30, m_window.GetWindowSize().first}
         , m_period_ms{period_ms} {}
 
     void Run() {
         GenerateSegments();
-       
+
         while (true) {
             clear();
             Update();
@@ -43,8 +43,14 @@ private:
     }
 
     void GenerateSegments() {
-        for (int i = 0; i < 80; i++) {
-            m_segments.emplace_back(rand_pos.GetRandomInt(), rand_size.GetRandomInt(), rand_size.GetRandomInt());
+        const std::pair<int, int> dim = m_window.GetWindowSize();
+        const int num_segs = static_cast<int>(dim.first * 0.65);
+        for (int i = 0; i < num_segs; i++) {
+            m_segments.emplace_back(rand_pos.GetRandomInt(),
+                                    rand_size.GetRandomInt(),
+                                    rand_size.GetRandomInt(),
+                                    dim.first,
+                                    dim.second);
             for (auto& seg : m_segments) {
                 seg.ConfigureSegement();
             }

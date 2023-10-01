@@ -31,15 +31,20 @@ class Symbol {
 public:
     using RandomInt = Matrix::Utility::RandomInt;
 
-    Symbol(int col, int row_start)
+    Symbol(int col, int row_start, int window_h, int window_w)
         : m_symbol{GenerateRandomChar()}
-        , m_pos{std::make_pair<int, int>(std::move(col), std::move(row_start))} {}
+        , m_pos{std::make_pair<int, int>(std::move(col), std::move(row_start))}
+        , m_win_dim{std::make_pair<int, int>(std::move(window_h), std::move(window_w))} {}
     ~Symbol() {}
 
 
     void UpdateSymbol(int height_pos, int width_pos, bool change_char = true) {
         if (change_char) { m_symbol = GenerateRandomChar(); }
-        m_pos.first = height_pos;
+        if (m_pos.first > m_win_dim.first) {
+            m_pos.first = 0;
+        } else{
+            m_pos.first = height_pos;
+        }
         m_pos.second = width_pos;
         Draw();
     }
@@ -62,6 +67,7 @@ private:
 
     wchar_t m_symbol;
     std::pair<int, int> m_pos;
+    std::pair<int, int> m_win_dim;
 };
 
 } // namespace Matrix::Symbols
