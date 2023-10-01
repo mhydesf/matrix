@@ -1,8 +1,11 @@
 #pragma once
 
 #include <vector>
-#include <random>
 #include <iostream>
+
+#include <curses.h>
+#include <ncurses.h>
+#include <randomint.h>
 
 namespace Matrix::Symbols {
 
@@ -26,21 +29,39 @@ const int MAX_CODE_IDX = CODES.size() - 1;
 
 class Symbol {
 public:
-    Symbol() {}
+    using RandomInt = Matrix::Utility::RandomInt;
+
+    Symbol(int col, int row_start)
+        : m_symbol{GenerateRandomChar()}
+        , m_pos{std::make_pair<int, int>(std::move(col), std::move(row_start))} {}
     ~Symbol() {}
 
+
+    void UpdateSymbol(int height_pos, int width_pos, bool change_char = true) {
+        if (change_char) { m_symbol = GenerateRandomChar(); }
+        m_pos.first = height_pos;
+        m_pos.second = width_pos;
+        Draw();
+    }
+
+    std::pair<int, int>& GetPosition() { return m_pos; }
+
+private:
     wchar_t GenerateRandomChar() {
-        int idx = m_distribution(m_gen);
-        m_symbol = CODES[idx];
-        return m_symbol;
+        int idx = rand.GetRandomInt();
+        return CODES[idx];
+    }
+    
+    void Draw() {
+        wchar_t wstr[] = { m_symbol, L'\0' };
+        mvaddwstr(m_pos.first, m_pos.second, wstr);
     }
 
 private:
-    std::random_device m_rd;
-    std::mt19937 m_gen{m_rd()};
-    std::uniform_int_distribution<int> m_distribution{MIN_CODE_IDX, MAX_CODE_IDX};
+    RandomInt rand{MIN_CODE_IDX, MAX_CODE_IDX};
 
     wchar_t m_symbol;
+    std::pair<int, int> m_pos;
 };
 
 } // namespace Matrix::Symbols

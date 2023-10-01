@@ -5,7 +5,7 @@ project(${PROJECT})
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(Curses REQUIRED)
-include_directories(inc)
+include_directories(src)
 
 add_executable(${PROJECT} main.cpp)
 
